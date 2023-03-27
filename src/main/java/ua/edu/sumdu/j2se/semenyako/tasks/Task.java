@@ -90,4 +90,37 @@ public class Task {
     public boolean isRepeated() {
         return isRepeated;
     }
+
+    public int nextTimeAfter(int current) {
+        if (!active) {
+            return -1;
+        }
+        if (!isRepeated) {
+            if(time <= current) {
+                return -1;
+            }
+            else
+                return time;
+        }
+        else {
+            if (current < start) {
+                return start;
+            }
+            int start_i = start;
+            int end_i = start_i + interval;
+            while (start_i < end) {
+                if (current < end_i) {
+                    return end_i;
+                }
+                start_i = end_i;
+                if (start_i + interval >= end) {
+                    return -1;
+                }
+                else {
+                    end_i = start_i + interval;
+                }
+            }
+            return -1;
+        }
+    }
 }
