@@ -69,9 +69,16 @@ public class ArrayTaskList {
                 '}';
     }
 
-    public void out() {
-        for (int i = 0; i < taskList.length; i++) {
-            System.out.println(i+1);
+    public ArrayTaskList incoming(int from, int to) {
+        ArrayTaskList tasksInAInterval = new ArrayTaskList();
+        for (int i = 0; i < countElements; i++) {
+            if (!taskList[i].isActive()) {
+                continue;
+            }
+            if (to > taskList[i].nextTimeAfter(from) && taskList[i].nextTimeAfter(from) != -1) {
+                tasksInAInterval.add(taskList[i]);
+            }
         }
+        return tasksInAInterval;
     }
 }

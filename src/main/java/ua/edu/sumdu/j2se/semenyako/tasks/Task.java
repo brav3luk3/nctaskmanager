@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class Task {
 
-    public String title;
-    public boolean active;
-    public int time;
-    public int start;
-    public int end;
-    public int interval;
-    public boolean isRepeated;
+    private String title;
+    private boolean active;
+    private int time;
+    private int start;
+    private int end;
+    private int interval;
+    private boolean isRepeated;
 
     public Task(String title, int time) {
         this.title = title;
