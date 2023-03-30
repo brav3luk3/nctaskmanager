@@ -1,5 +1,7 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
+import java.util.Objects;
+
 public class Task {
 
     public String title;
@@ -122,5 +124,24 @@ public class Task {
             }
             return -1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "title='" + title + '\'' + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return active == task.active && time == task.time && start == task.start && end == task.end && interval == task.interval && isRepeated == task.isRepeated && Objects.equals(title, task.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, active, time, start, end, interval, isRepeated);
     }
 }
