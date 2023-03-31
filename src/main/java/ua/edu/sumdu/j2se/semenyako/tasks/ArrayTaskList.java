@@ -13,23 +13,18 @@ public class ArrayTaskList {
     }
 
     public void add(Task task) {
-        if (countElements == 0) {
-            taskList[0] = task;
+        if (countElements == arraySize) {
+            resize();
         }
-        else {
-            if (countElements == arraySize) {
-                arraySize = arraySize*2;
-                resize();
-            }
-            taskList[countElements] = task;
-        }
+        taskList[countElements] = task;
         countElements++;
     }
 
     private void resize() {
+        arraySize = arraySize*2;
         Task[] temp = new Task[arraySize];
         for (int i = 0; i < countElements; i++) {
-            temp[i] = taskList[i];
+            temp[i] = getTask(i);
         }
         taskList = temp;
     }
@@ -37,20 +32,19 @@ public class ArrayTaskList {
     public boolean remove(Task task) {
         boolean matchCheck = false;
         for (int i = 0; i < countElements; i++) {
-            if(task.equals(taskList[i])) {
+            if(task.equals(getTask(i))) {
                 matchCheck = true;
             }
-            if (matchCheck && i < countElements-1) {
-                taskList[i] = taskList[i+1];
+            if (matchCheck && i < countElements - 1) {
+                taskList[i] = getTask(i + 1);
             }
         }
-        if(matchCheck) {
+        if (matchCheck) {
             countElements--;
-            resize();
             return true;
-        }
-        else
+        } else {
             return false;
+        }
     }
 
     public int size() {
@@ -72,11 +66,11 @@ public class ArrayTaskList {
     public ArrayTaskList incoming(int from, int to) {
         ArrayTaskList tasksInAInterval = new ArrayTaskList();
         for (int i = 0; i < countElements; i++) {
-            if (!taskList[i].isActive()) {
+            if (!getTask(i).isActive()) {
                 continue;
             }
-            if (to > taskList[i].nextTimeAfter(from) && taskList[i].nextTimeAfter(from) != -1) {
-                tasksInAInterval.add(taskList[i]);
+            if (to > getTask(i).nextTimeAfter(from) && getTask(i).nextTimeAfter(from) != -1) {
+                tasksInAInterval.add(getTask(i));
             }
         }
         return tasksInAInterval;
