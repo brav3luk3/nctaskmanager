@@ -21,7 +21,7 @@ public class ArrayTaskList {
     }
 
     private void resize() {
-        arraySize = arraySize*2;
+        arraySize = arraySize * 2;
         Task[] temp = new Task[arraySize];
         for (int i = 0; i < countElements; i++) {
             temp[i] = getTask(i);
