@@ -2,13 +2,13 @@ package ua.edu.sumdu.j2se.semenyako.tasks;
 
 import java.util.Arrays;
 
-public class ArrayTaskList {
+public class LinkedTaskList {
     public Task[] taskList;
     public int arraySize = 10;
     public int countElements = 0;
 
 
-    public ArrayTaskList() {
+    public LinkedTaskList() {
         taskList = new Task[arraySize];
     }
 
@@ -67,8 +67,8 @@ public class ArrayTaskList {
                 '}';
     }
 
-    public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList tasksInAInterval = new ArrayTaskList();
+    public LinkedTaskList incoming(int from, int to) {
+        LinkedTaskList tasksInAInterval = new LinkedTaskList();
         for (int i = 0; i < countElements; i++) {
             if (!getTask(i).isActive()) {
                 continue;
