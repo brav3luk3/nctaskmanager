@@ -51,12 +51,11 @@ public class ArrayTaskList {
         return countElements;
     }
 
-    public Task getTask(int index) throws IndexOutOfBoundsException {
-        if (index < size() && index >= 0) {
-            return taskList[index];
-        } else {
+    public Task getTask(int index) {
+        if (index >= size() || index < 0) {
             throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
         }
+        return taskList[index];
     }
 
     @Override

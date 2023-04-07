@@ -1,70 +1,68 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
-import java.util.Arrays;
-
 public class LinkedTaskList {
-    public Task[] taskList;
-    public int arraySize = 10;
-    public int countElements = 0;
 
-
-    public LinkedTaskList() {
-        taskList = new Task[arraySize];
-    }
+    private Node first;
+    private Node last;
+    int countElements = 0;
 
     public void add(Task task) {
-        if (countElements == arraySize) {
-            resize();
+        Node newNode = new Node(task);
+        if (first == null) {
+            first = newNode;
+            last = first;
+        } else {
+            last.next = newNode;
+            last = newNode;
         }
-        taskList[countElements] = task;
         countElements++;
     }
 
-    private void resize() {
-        arraySize = arraySize * 2;
-        Task[] temp = new Task[arraySize];
-        for (int i = 0; i < countElements; i++) {
-            temp[i] = getTask(i);
-        }
-        taskList = temp;
-    }
-
     public boolean remove(Task task) {
-        boolean matchCheck = false;
-        for (int i = 0; i < countElements; i++) {
-            if(task.equals(getTask(i))) {
-                matchCheck = true;
-            }
-            if (matchCheck && i < countElements - 1) {
-                taskList[i] = getTask(i + 1);
-            }
-        }
-        if (matchCheck) {
+        Node currentNode = first;
+        if (task.equals(first.task) && first == last) {
+            first = null;
+            last = null;
             countElements--;
             return true;
-        } else {
-            return false;
         }
+        if (task.equals(first.task)) {
+            first = first.next;
+            countElements--;
+            return true;
+        }
+        while (currentNode.next != null) {
+            if (task.equals(currentNode.next.task)) {
+                if (currentNode.next.next == null) {
+                    last = currentNode;
+                }
+                currentNode.next = currentNode.next.next;
+                countElements--;
+                return true;
+            } else {
+                currentNode = currentNode.next;
+            }
+        }
+        return false;
     }
 
     public int size() {
         return countElements;
     }
 
-    public Task getTask(int index) throws IndexOutOfBoundsException {
-        if (index < size() && index >= 0) {
-            return taskList[index];
-        } else {
+    public Task getTask(int index) {
+        Node currentNode = first;
+        if (index >= size() || index < 0) {
             throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
         }
-    }
-
-    @Override
-    public String toString() {
-        return "ArrayTaskList{" +
-                "tasklist=" + Arrays.toString(taskList) +
-                ", listsize=" + arraySize +
-                '}';
+        for (int i = 0; i < size(); i++) {
+            if (i == index) {
+                return currentNode.task;
+            } else {
+                currentNode = currentNode.next;
+            }
+        }
+        throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
     }
 
     public LinkedTaskList incoming(int from, int to) {
@@ -78,5 +76,15 @@ public class LinkedTaskList {
             }
         }
         return tasksInAInterval;
+    }
+
+    private class Node {
+        private Task task;
+        private Node next;
+
+        public Node(Task task) {
+            this.task = task;
+            next = null;
+        }
     }
 }

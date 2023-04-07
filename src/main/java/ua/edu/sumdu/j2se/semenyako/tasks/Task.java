@@ -12,7 +12,7 @@ public class Task {
     private int interval;
     private boolean isRepeated;
 
-    public Task(String title, int time) throws IllegalArgumentException {
+    public Task(String title, int time) {
         if (title != null) {
             this.title = title;
         } else {
@@ -26,7 +26,7 @@ public class Task {
         isRepeated = false;
     }
 
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+    public Task(String title, int start, int end, int interval) {
         if (title != null) {
             this.title = title;
         } else {
