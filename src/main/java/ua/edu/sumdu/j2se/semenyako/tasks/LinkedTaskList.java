@@ -4,7 +4,7 @@ public class LinkedTaskList {
 
     private Node first;
     private Node last;
-    int countElements = 0;
+    private int countElements = 0;
 
     public void add(Task task) {
         Node newNode = new Node(task);
