@@ -13,16 +13,36 @@ public class Task {
     private boolean isRepeated;
 
     public Task(String title, int time) {
-        this.title = title;
-        this.time = time;
+        if (title != null) {
+            this.title = title;
+        } else {
+            throw new IllegalArgumentException("Title must be not NULL.");
+        }
+        if (time < 0) {
+            throw new IllegalArgumentException("Time must be not < 0.");
+        } else {
+            this.time = time;
+        }
         isRepeated = false;
     }
 
     public Task(String title, int start, int end, int interval) {
-        this.title = title;
-        this.start = start;
-        this.end = end;
-        this.interval = interval;
+        if (title != null) {
+            this.title = title;
+        } else {
+            throw new IllegalArgumentException("Title must be not NULL.");
+        }
+        if (start < 0 && end < 0) {
+            throw new IllegalArgumentException("Start and end must be not < 0.");
+        } else {
+            this.start = start;
+            this.end = end;
+        }
+        if (interval > 0) {
+            this.interval = interval;
+        } else {
+            throw new IllegalArgumentException("Interval must be > 0.");
+        }
         isRepeated = true;
     }
 

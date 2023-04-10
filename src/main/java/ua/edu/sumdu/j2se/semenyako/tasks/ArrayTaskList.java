@@ -52,6 +52,9 @@ public class ArrayTaskList {
     }
 
     public Task getTask(int index) {
+        if (index >= size() || index < 0) {
+            throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
+        }
         return taskList[index];
     }
 
