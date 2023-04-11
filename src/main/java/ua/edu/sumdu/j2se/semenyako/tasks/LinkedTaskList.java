@@ -1,11 +1,11 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList {
 
     private Node first;
     private Node last;
-    private int countElements = 0;
 
+    @Override
     public void add(Task task) {
         Node newNode = new Node(task);
         if (first == null) {
@@ -18,6 +18,7 @@ public class LinkedTaskList {
         countElements++;
     }
 
+    @Override
     public boolean remove(Task task) {
         Node currentNode = first;
         if (task.equals(first.task) && first == last) {
@@ -46,10 +47,7 @@ public class LinkedTaskList {
         return false;
     }
 
-    public int size() {
-        return countElements;
-    }
-
+    @Override
     public Task getTask(int index) {
         Node currentNode = first;
         if (index >= size() || index < 0) {
@@ -63,19 +61,6 @@ public class LinkedTaskList {
             }
         }
         throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
-    }
-
-    public LinkedTaskList incoming(int from, int to) {
-        LinkedTaskList tasksInAInterval = new LinkedTaskList();
-        for (int i = 0; i < countElements; i++) {
-            if (!getTask(i).isActive()) {
-                continue;
-            }
-            if (to > getTask(i).nextTimeAfter(from) && getTask(i).nextTimeAfter(from) != -1) {
-                tasksInAInterval.add(getTask(i));
-            }
-        }
-        return tasksInAInterval;
     }
 
     private class Node {
