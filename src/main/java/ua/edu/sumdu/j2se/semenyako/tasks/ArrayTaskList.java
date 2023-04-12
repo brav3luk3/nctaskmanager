@@ -2,16 +2,15 @@ package ua.edu.sumdu.j2se.semenyako.tasks;
 
 import java.util.Arrays;
 
-public class ArrayTaskList {
-    public Task[] taskList;
-    public int arraySize = 10;
-    public int countElements = 0;
-
+public class ArrayTaskList extends AbstractTaskList {
+    private Task[] taskList;
+    private int arraySize = 10;
 
     public ArrayTaskList() {
         taskList = new Task[arraySize];
     }
 
+    @Override
     public void add(Task task) {
         if (countElements == arraySize) {
             resize();
@@ -29,6 +28,7 @@ public class ArrayTaskList {
         taskList = temp;
     }
 
+    @Override
     public boolean remove(Task task) {
         boolean matchCheck = false;
         for (int i = 0; i < countElements; i++) {
@@ -47,10 +47,7 @@ public class ArrayTaskList {
         }
     }
 
-    public int size() {
-        return countElements;
-    }
-
+    @Override
     public Task getTask(int index) {
         if (index >= size() || index < 0) {
             throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
@@ -64,18 +61,5 @@ public class ArrayTaskList {
                 "tasklist=" + Arrays.toString(taskList) +
                 ", listsize=" + arraySize +
                 '}';
-    }
-
-    public ArrayTaskList incoming(int from, int to) {
-        ArrayTaskList tasksInAInterval = new ArrayTaskList();
-        for (int i = 0; i < countElements; i++) {
-            if (!getTask(i).isActive()) {
-                continue;
-            }
-            if (to > getTask(i).nextTimeAfter(from) && getTask(i).nextTimeAfter(from) != -1) {
-                tasksInAInterval.add(getTask(i));
-            }
-        }
-        return tasksInAInterval;
     }
 }
