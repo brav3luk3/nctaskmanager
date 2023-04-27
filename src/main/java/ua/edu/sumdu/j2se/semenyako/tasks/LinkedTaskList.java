@@ -1,6 +1,8 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
-public class LinkedTaskList extends AbstractTaskList {
+import java.util.Iterator;
+
+public class LinkedTaskList extends AbstractTaskList implements Cloneable {
 
     private Node first;
     private Node last;
@@ -63,13 +65,76 @@ public class LinkedTaskList extends AbstractTaskList {
         throw new IndexOutOfBoundsException("Index must be < size and >= 0.");
     }
 
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < countElements; i++) {
+            result.append(getTask(i));
+        }
+        return result.toString();
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        return new LinkedTaskListIterator(this);
+    }
+
     private class Node {
         private Task task;
         private Node next;
 
-        public Node(Task task) {
+        private Node(Task task) {
             this.task = task;
             next = null;
         }
     }
+
+    private class LinkedTaskListIterator implements Iterator<Task> {
+
+        private Node current;
+        private Node lastElement;
+        private LinkedTaskList list;
+
+        private LinkedTaskListIterator(LinkedTaskList tasks) {
+            this.list = tasks;
+            this.current = tasks.first;
+            this.lastElement = null;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        @Override
+        public Task next() {
+            if (hasNext()) {
+                lastElement = current;
+                current = current.next;
+                return lastElement.task;
+            }
+            return null;
+        }
+
+        @Override
+        public void remove() {
+            if (lastElement == null) {
+                throw new IllegalStateException();
+            } else {
+                list.remove(lastElement.task);
+            }
+        }
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        LinkedTaskList clone = new LinkedTaskList();
+
+        for (int i = 0; i < countElements; i++) {
+            clone.add(getTask(i));
+        }
+
+        return clone;
+    }
+
 }

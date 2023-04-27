@@ -148,8 +148,14 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' + '}';
+        return "Task:" +
+                "\t\ttitle: " + title +
+                "\t\ttime: " + time +
+                "\t\tstart: " + start +
+                "\t\tend: " + end +
+                "\t\tinterval: " + interval +
+                "\t\tactive: " + active +
+                "\t\trepeated: " + isRepeated;
     }
 
     @Override
@@ -157,11 +163,27 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return active == task.active && time == task.time && start == task.start && end == task.end && interval == task.interval && isRepeated == task.isRepeated && Objects.equals(title, task.title);
+        if (isRepeated != ((Task) o).isRepeated())
+            return false;
+        if(isRepeated) {
+            return start == task.start &&
+                    end == task.end &&
+                    interval == task.interval &&
+                    active == task.active &&
+                    Objects.equals(title, task.title);
+        } else {
+            return time == task.time &&
+                    active == task.active &&
+                    Objects.equals(title, task.title);
+        }
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, active, time, start, end, interval, isRepeated);
+        if (isRepeated){
+            return Objects.hash(title, start, end, interval, active, true);
+        }
+        else
+            return Objects.hash(title, time, active, false);
     }
 }
