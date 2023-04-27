@@ -2,7 +2,7 @@ package ua.edu.sumdu.j2se.semenyako.tasks;
 
 import java.util.Objects;
 
-public class Task {
+public class Task implements Cloneable {
 
     private String title;
     private boolean active;
@@ -160,11 +160,16 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        if (isRepeated != ((Task) o).isRepeated())
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
+        }
+        Task task = (Task) o;
+        if (isRepeated != task.isRepeated()) {
+            return false;
+        }
         if(isRepeated) {
             return start == task.start &&
                     end == task.end &&
@@ -185,5 +190,10 @@ public class Task {
         }
         else
             return Objects.hash(title, time, active, false);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
