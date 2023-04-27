@@ -3,7 +3,7 @@ package ua.edu.sumdu.j2se.semenyako.tasks;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
-abstract public class AbstractTaskList implements Cloneable, Iterable<Task> {
+abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     protected int countElements = 0;
 
@@ -21,14 +21,16 @@ abstract public class AbstractTaskList implements Cloneable, Iterable<Task> {
         AbstractTaskList tasksInAInterval;
         try {
             tasksInAInterval = getClass().getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e ) {
+        } catch (InstantiationException | IllegalAccessException
+                | InvocationTargetException | NoSuchMethodException e) {
             return null;
         }
         for (int i = 0; i < size(); i++) {
                 if (!getTask(i).isActive()) {
                     continue;
                 }
-                if (to > getTask(i).nextTimeAfter(from) && getTask(i).nextTimeAfter(from) != -1) {
+                if (to > getTask(i).nextTimeAfter(from)
+                        && getTask(i).nextTimeAfter(from) != -1) {
                     tasksInAInterval.add(getTask(i));
                 }
         }
@@ -37,8 +39,12 @@ abstract public class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         AbstractTaskList that = (AbstractTaskList) o;
         if (this.size() != that.size()) {
             return false;

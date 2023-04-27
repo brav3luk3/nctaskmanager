@@ -83,7 +83,7 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         private Task task;
         private Node next;
 
-        public Node(Task task) {
+        private Node(Task task) {
             this.task = task;
             next = null;
         }
@@ -92,13 +92,13 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
     private class LinkedTaskListIterator implements Iterator<Task> {
 
         private Node current;
-        private Node last_it;
+        private Node lastElement;
         private LinkedTaskList list;
 
-        public LinkedTaskListIterator(LinkedTaskList tasks) {
+        private LinkedTaskListIterator(LinkedTaskList tasks) {
             this.list = tasks;
             this.current = tasks.first;
-            this.last_it = null;
+            this.lastElement = null;
         }
 
         @Override
@@ -109,21 +109,19 @@ public class LinkedTaskList extends AbstractTaskList implements Cloneable {
         @Override
         public Task next() {
             if (hasNext()) {
-                last_it = current;
+                lastElement = current;
                 current = current.next;
-                return last_it.task;
-            } else {
-                current = first;
-                return first.task;
+                return lastElement.task;
             }
+            return null;
         }
 
         @Override
         public void remove() {
-            if (last_it == null) {
+            if (lastElement == null) {
                 throw new IllegalStateException();
             } else {
-                list.remove(last_it.task);
+                list.remove(lastElement.task);
             }
         }
     }

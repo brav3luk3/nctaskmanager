@@ -4,8 +4,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 public class ArrayTaskList extends AbstractTaskList implements Cloneable {
+    private final int startSize = 10;
     private Task[] taskList;
-    private int arraySize = 10;
+    private int arraySize = startSize;
 
     public ArrayTaskList() {
         taskList = new Task[arraySize];
@@ -32,8 +33,8 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
     @Override
     public boolean remove(Task task) {
         boolean matchCheck = false;
-        if(task.equals(getTask(countElements-1))) {
-            taskList[countElements-1] = null;
+        if (task.equals(getTask(countElements - 1))) {
+            taskList[countElements - 1] = null;
             matchCheck = true;
         } else {
             for (int i = 0; i < countElements; i++) {
@@ -84,7 +85,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         return new ArrayListIterator(this);
     }
 
-    public class ArrayListIterator implements Iterator<Task>{
+    public class ArrayListIterator implements Iterator<Task> {
 
         private ArrayTaskList array;
         private int index;
@@ -111,8 +112,7 @@ public class ArrayTaskList extends AbstractTaskList implements Cloneable {
         }
 
         @Override
-        public void remove()
-        {
+        public void remove() {
             if (last < 0) {
                 throw new IllegalStateException();
             } else {
