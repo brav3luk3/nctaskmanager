@@ -1,9 +1,13 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
-abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
+public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     protected int countElements = 0;
 
@@ -17,24 +21,28 @@ abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     public abstract Task getTask(int index);
 
-    public AbstractTaskList incoming(int from, int to) {
+    public final AbstractTaskList incoming(int from, int to) {
         AbstractTaskList tasksInAInterval;
         try {
             tasksInAInterval = getClass().getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException
                 | InvocationTargetException | NoSuchMethodException e) {
-            return null;
+            throw new IllegalStateException();
         }
-        for (int i = 0; i < size(); i++) {
-                if (!getTask(i).isActive()) {
-                    continue;
-                }
-                if (to > getTask(i).nextTimeAfter(from)
-                        && getTask(i).nextTimeAfter(from) != -1) {
-                    tasksInAInterval.add(getTask(i));
-                }
-        }
+        getStream()
+                .filter(x -> x.isActive())
+                .filter(x -> x.nextTimeAfter(from) < to && x.nextTimeAfter(from) != -1)
+                .forEach(x -> tasksInAInterval.add(x));
         return tasksInAInterval;
+    }
+
+    public Stream<Task> getStream() {
+        Iterator<Task> taskIterator = iterator();
+        List<Task> list = new ArrayList<>();
+        while (taskIterator.hasNext()) {
+            list.add(taskIterator.next());
+        }
+        return list.stream();
     }
 
     @Override
