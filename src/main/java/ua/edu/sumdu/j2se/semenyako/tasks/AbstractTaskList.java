@@ -1,6 +1,7 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,7 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     public abstract Task getTask(int index);
 
-    public final AbstractTaskList incoming(int from, int to) {
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) {
         AbstractTaskList tasksInAInterval;
         try {
             tasksInAInterval = getClass().getConstructor().newInstance();
@@ -31,7 +32,7 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
         }
         getStream()
                 .filter(x -> x.isActive())
-                .filter(x -> x.nextTimeAfter(from) < to && x.nextTimeAfter(from) != -1)
+                .filter(x -> x.nextTimeAfter(from).isBefore(to) && x.nextTimeAfter(from) != null)
                 .forEach(x -> tasksInAInterval.add(x));
         return tasksInAInterval;
     }
