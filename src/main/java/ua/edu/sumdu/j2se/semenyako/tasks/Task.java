@@ -1,42 +1,43 @@
 package ua.edu.sumdu.j2se.semenyako.tasks;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task implements Cloneable {
 
     private String title;
     private boolean active;
-    private int time;
-    private int start;
-    private int end;
+    private LocalDateTime time;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int interval;
     private boolean isRepeated;
 
-    public Task(String title, int time) {
+    public Task(String title, LocalDateTime time) {
         if (title != null) {
             this.title = title;
         } else {
             throw new IllegalArgumentException("Title must be not NULL.");
         }
-        if (time < 0) {
-            throw new IllegalArgumentException("Time must be not < 0.");
-        } else {
+        if (time != null) {
             this.time = time;
+        } else {
+            throw new IllegalArgumentException("Time must be not < 0.\ttime = null");
         }
         isRepeated = false;
     }
 
-    public Task(String title, int start, int end, int interval) {
+    public Task(String title, LocalDateTime start, LocalDateTime end, int interval) {
         if (title != null) {
             this.title = title;
         } else {
             throw new IllegalArgumentException("Title must be not NULL.");
         }
-        if (start < 0 && end < 0) {
-            throw new IllegalArgumentException("Start and end must be not < 0.");
-        } else {
+        if (start != null && end != null) {
             this.start = start;
             this.end = end;
+        } else {
+            throw new IllegalArgumentException("Start and end must be not < 0.");
         }
         if (interval > 0) {
             this.interval = interval;
@@ -62,31 +63,31 @@ public class Task implements Cloneable {
         this.active = active;
     }
 
-    public int getTime() {
+    public LocalDateTime  getTime() {
         if (isRepeated) {
             return start;
         }
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
         if (isRepeated) {
             isRepeated = false;
-            start = -1;
-            end = -1;
+            start = null;
+            end = null;
             interval = -1;
         }
     }
 
-    public int getStartTime() {
+    public LocalDateTime getStartTime() {
         if (!isRepeated) {
             return time;
         }
         return start;
     }
 
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         if (!isRepeated) {
             return time;
         }
@@ -100,7 +101,7 @@ public class Task implements Cloneable {
         return interval;
     }
 
-    public void setTime(int start, int end, int interval) {
+    public void setTime(LocalDateTime start, LocalDateTime end, int interval) {
         this.start = start;
         this.end = end;
         this.interval = interval;
@@ -113,36 +114,37 @@ public class Task implements Cloneable {
         return isRepeated;
     }
 
-    public int nextTimeAfter(int current) {
-        if (!active) {
-            return -1;
+    public LocalDateTime nextTimeAfter(LocalDateTime current) {
+        if (!this.active) {
+            return null;
         }
         if (!isRepeated) {
-            if(time <= current) {
-                return -1;
+            if(current.isAfter(this.time) || current.isEqual(this.time)) {
+                return null;
             }
             else
                 return time;
         }
         else {
-            if (current < start) {
+            if (current.isBefore(this.start)) {
                 return start;
             }
-            int start_i = start;
-            int end_i = start_i + interval;
-            while (start_i < end) {
-                if (current < end_i) {
+            LocalDateTime start_i = start;
+            LocalDateTime end_i = start_i.plusSeconds(this.interval);
+            while (start_i.isBefore(end)) {
+                if (end_i.isAfter(end)) {
+                    return null;
+                }
+                if (current.isBefore(end_i)) {
                     return end_i;
                 }
+                if (end_i.isEqual(end)) {
+                    return null;
+                }
                 start_i = end_i;
-                if (start_i + interval >= end) {
-                    return -1;
-                }
-                else {
-                    end_i = start_i + interval;
-                }
+                end_i = start_i.plusSeconds(this.interval);
             }
-            return -1;
+            return null;
         }
     }
 
